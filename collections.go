@@ -40,6 +40,7 @@ func (collection *Collection) Print() interface{} {
 	return nil
 }
 
+// Factory Method to create our wrapper instance
 func CollectionFrom(sliceOfAnything []interface{}) (*Collection)  {
 	this := new(Collection)
 	this.values = sliceOfAnything
