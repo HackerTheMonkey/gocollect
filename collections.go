@@ -26,7 +26,7 @@ func (collection *Collection) Map(mapper func(value interface{}) interface{}) *C
 	return collection
 }
 
-func (collection *Collection)unwrap() (underlyingArray []interface{}) {
+func (collection *Collection) Unwrap() (underlyingArray []interface{}) {
 	underlyingArray = collection.values
 	return
 }
