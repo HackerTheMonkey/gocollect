@@ -31,6 +31,8 @@ func (collection *Collection) Unwrap() (underlyingArray []interface{}) {
 	return
 }
 
+// TODO decide if we should keep this or make it more generic by
+// simply allowing the support for for-each style
 func (collection *Collection) Print() interface{} {
 	for _,v := range collection.values{
 		fmt.Println(v)

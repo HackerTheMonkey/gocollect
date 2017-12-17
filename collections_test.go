@@ -76,3 +76,7 @@ func TestMappingProducesTheExpectedOutcome(t *testing.T)  {
 		}
 	}
 }
+
+func TestPrinting(t *testing.T)  {
+	CollectionFrom(planets).Print()
+}
