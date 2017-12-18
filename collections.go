@@ -6,10 +6,16 @@ type Collection struct {
 	values []interface{}
 }
 
-// Factory Method to create our wrapper instance
-func CollectionFrom(sliceOfAnything []interface{}) (*Collection)  {
+// Creates a collection from a slice
+func CollectionFromSlice(sliceOfAnything []interface{}) (*Collection)  {
 	this := new(Collection)
 	this.values = sliceOfAnything
+	return this
+}
+
+func CollectionFromElement(element interface{}) (*Collection)  {
+	this := new(Collection)
+	this.values = append(this.values, element)
 	return this
 }
 
@@ -41,9 +47,8 @@ func (collection *Collection) Count() int {
 	return sum
 }
 
-func (collection *Collection) Unwrap() (underlyingArray []interface{}) {
-	underlyingArray = collection.values
-	return
+func (collection *Collection) Unwrap() []interface{} {
+	return collection.values
 }
 
 // TODO decide if we should keep this or make it more generic by

@@ -15,7 +15,7 @@ var allCapsPlanets = []interface{}{
 
 // This tests against the zero value of an array
 func TestCollectionCreationFromNilProducesEmptyArray(t *testing.T)  {
-	if len(CollectionFrom(nil).Unwrap()) != 0{
+	if len(CollectionFromSlice(nil).Unwrap()) != 0{
 		t.Errorf("Expecting an empty array created from \"nil\"")
 	}
 }
@@ -24,7 +24,7 @@ func TestCollectionCreationFromNilProducesEmptyArray(t *testing.T)  {
 func TestCollectionCreationFromEmptyArrayProducesEmptyArray(t *testing.T)  {
 	var emptyArray = [...]interface{}{}
 
-	if len(CollectionFrom(emptyArray[0:0]).Unwrap()) != 0{
+	if len(CollectionFromSlice(emptyArray[0:0]).Unwrap()) != 0{
 		t.Errorf("Expecting an empty array created from \"nil\"")
 	}
 }
@@ -39,7 +39,7 @@ func TestFilteringProducesTheExpectedOutcome(t *testing.T) {
 	}
 
 	// When
-	underlyingArray := CollectionFrom(planets).Filter(isMarsPredicate).Unwrap()
+	underlyingArray := CollectionFromSlice(planets).Filter(isMarsPredicate).Unwrap()
 
 	// Then
 	arrayLength := len(underlyingArray)
@@ -59,7 +59,7 @@ func TestMappingProducesTheExpectedOutcome(t *testing.T)  {
 	toAllCaps := func(v interface{}) interface{} {return strings.ToUpper(v.(string))}
 
 	// When
-	underlyingArray := CollectionFrom(planets).Map(toAllCaps).Unwrap()
+	underlyingArray := CollectionFromSlice(planets).Map(toAllCaps).Unwrap()
 
 	// Then
 	if len(underlyingArray) != expectedArrayLength{
@@ -78,7 +78,7 @@ func TestMappingProducesTheExpectedOutcome(t *testing.T)  {
 }
 
 func TestPrinting(t *testing.T)  {
-	CollectionFrom(planets).Print()
+	CollectionFromSlice(planets).Print()
 }
 
 func TestThatForEachPerformsTheActionOnEachElement(t *testing.T)  {
@@ -89,7 +89,7 @@ func TestThatForEachPerformsTheActionOnEachElement(t *testing.T)  {
 	}
 
 	// When
-	CollectionFrom(planets).ForEach(consumer)
+	CollectionFromSlice(planets).ForEach(consumer)
 
 	// Then
 	if len(passedElements) != len(planets){
@@ -111,7 +111,7 @@ func TestThatPeekPerformsTheActionOnEachElement(t *testing.T)  {
 	}
 
 	// When
-	underlyingArray := CollectionFrom(planets).Peek(consumer).Unwrap()
+	underlyingArray := CollectionFromSlice(planets).Peek(consumer).Unwrap()
 
 	// Then
 
@@ -136,10 +136,33 @@ func TestThatPeekPerformsTheActionOnEachElement(t *testing.T)  {
 
 func TestThatCountWorksAsExpected(t *testing.T)  {
 	// When
-	count := CollectionFrom(planets).Count()
+	count := CollectionFromSlice(planets).Count()
 
 	// Then
 	if count != len(planets) {
 		t.Fatalf("Incorrect count, expecting %d, actual %d", len(planets), count)
+	}
+}
+
+func Test_CreatingACollectionFromASingleElement_UnwrapIntoASingleElementSlice(t *testing.T)  {
+	// When
+	elements := CollectionFromElement("something").Unwrap()
+
+	// Then
+	if len(elements) != 1{
+		t.Fatalf("Expecting a single element slice, found %d", len(elements))
+	}
+}
+
+func Test_CreatingACollectionFromASingleElement_UnwrapIntoExpectedElement(t *testing.T)  {
+	// Given
+	expected := "something"
+
+	// When
+	actual := CollectionFromElement(expected).Unwrap()[0]
+
+	// Then
+	if actual != expected{
+		t.Fatalf("Expected %s, Found %s", expected, actual)
 	}
 }
