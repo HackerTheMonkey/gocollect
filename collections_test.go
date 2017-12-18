@@ -80,3 +80,66 @@ func TestMappingProducesTheExpectedOutcome(t *testing.T)  {
 func TestPrinting(t *testing.T)  {
 	CollectionFrom(planets).Print()
 }
+
+func TestThatForEachPerformsTheActionOnEachElement(t *testing.T)  {
+	// Given
+	var passedElements []interface{}
+	consumer := func(v interface{}) {
+		passedElements = append(passedElements, v)
+	}
+
+	// When
+	CollectionFrom(planets).ForEach(consumer)
+
+	// Then
+	if len(passedElements) != len(planets){
+		t.Fatalf("Not all array elements are passed to the consumer, expecting %d, actual %d", len(planets), len(passedElements))
+	}
+
+	for i := 0; i < len(planets); i++{
+		if passedElements[i] != passedElements[i]{
+			t.Errorf("Expected %s, Actual %s", planets[i], passedElements[i])
+		}
+	}
+}
+
+func TestThatPeekPerformsTheActionOnEachElement(t *testing.T)  {
+	// Given
+	var passedElements []interface{}
+	consumer := func(v interface{}) {
+		passedElements = append(passedElements, v.(string) + "b")
+	}
+
+	// When
+	underlyingArray := CollectionFrom(planets).Peek(consumer).Unwrap()
+
+	// Then
+
+	// test that all elements have been peeked on
+	if len(passedElements) != len(planets){
+		t.Fatalf("Not all array elements are passed to the consumer, expecting %d, actual %d", len(planets), len(passedElements))
+	}
+
+	for i := 0; i < len(planets); i++{
+		if passedElements[i] != passedElements[i]{
+			t.Errorf("Expected %s, Actual %s", planets[i], passedElements[i])
+		}
+	}
+
+	// Test that the original elements of the collection are not altered during peeking
+	for i := 0; i < len(planets); i++{
+		if underlyingArray[i] != planets[i]{
+			t.Errorf("Expected %s, Actual %s", underlyingArray[i], planets[i])
+		}
+	}
+}
+
+func TestThatCountWorksAsExpected(t *testing.T)  {
+	// When
+	count := CollectionFrom(planets).Count()
+
+	// Then
+	if count != len(planets) {
+		t.Fatalf("Incorrect count, expecting %d, actual %d", len(planets), count)
+	}
+}
