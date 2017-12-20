@@ -166,3 +166,42 @@ func Test_CreatingACollectionFromASingleElement_UnwrapIntoExpectedElement(t *tes
 		t.Fatalf("Expected %s, Found %s", expected, actual)
 	}
 }
+
+func Test_whenEmptyCollection_returnFalseForKeyExistence(t *testing.T)  {
+	// Given
+	var emptyArray []interface{}
+
+	// When
+	_, exists := CollectionFromSlice(emptyArray).FindFirst()
+
+	// Then
+	if exists == true {
+		t.Fatalf("no elements should exist in an empty collection")
+	}
+}
+
+func Test_whenEmptyCollection_returnReturnsZeroValue(t *testing.T)  {
+	// Given
+	var emptyArray []interface{}
+
+	// When
+	value, _ := CollectionFromSlice(emptyArray).FindFirst()
+
+	// Then
+	if value != nil {
+		t.Fatalf("Element value should be the zero value of the given type")
+	}
+}
+
+func TestReturnsAnElementAsFirstWhenCollectionIsNotEmpty(t *testing.T)  {
+	// Given
+	var elements = []interface{}{"1"}
+
+	// When
+	value, _ := CollectionFromSlice(elements).FindFirst()
+
+	// Then
+	if value != "1" {
+		t.Fatalf("Incorrect value retrieved %s", value)
+	}
+}

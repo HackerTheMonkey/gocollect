@@ -72,3 +72,10 @@ func (collection *Collection) Peek(consumer func(value interface{})) *Collection
 	}
 	return collection
 }
+
+func (collection *Collection) FindFirst() (interface{}, bool) {
+	if len(collection.values) != 0{
+		return collection.values[0], true
+	}
+	return nil, false
+}
